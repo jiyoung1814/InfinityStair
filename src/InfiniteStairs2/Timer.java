@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import javax.swing.JProgressBar;
 
 public class Timer extends Thread{
-	int limit = 5000;
-	static boolean timeout = false;
+	int limit;
+	static boolean timeout;
 	JProgressBar pgb;
 	ImagePanel jp;
 	Character character;
 	public Timer(ImagePanel jp,JProgressBar pgb, Character character) {
+		limit = 5000;
+		timeout = false;
 		this.jp = jp;
 		this.pgb = pgb;
 		this.character = character;

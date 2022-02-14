@@ -11,13 +11,20 @@ public class Character extends JLabel implements Runnable{
 	static int foot = 1; //-1: ¿Þ¹ß, 1: ¿À¸¥¹ß
 	static boolean isMoving;
 	static boolean isFalling;
+	Frame2 f2;
 	
 	ImagePanel jp;
 	ArrayList<Stair> sa;
 	
-	public Character(String path, ImagePanel jp,ArrayList<Stair> sa) {
+	public Character(String path, ImagePanel jp,ArrayList<Stair> sa, Frame2 f2) {
 		this.jp = jp;
 		this.sa = sa;
+		this.f2 = f2;
+		
+		foot = 1;
+		isMoving = false;
+		isFalling = false;
+		
 		ImageIcon ii = new ImageIcon(path);
 		setIcon(ii);
 		setSize(70, 150);
@@ -134,6 +141,8 @@ public class Character extends JLabel implements Runnable{
 			} catch (InterruptedException e) {e.printStackTrace();}	
 		}
 	}
+	
+	
 
 	@Override
 	public void run() {
@@ -148,12 +157,14 @@ public class Character extends JLabel implements Runnable{
 				isMoving = false;
 			}
 			
-			if(isFalling) {
+			if(isFalling){
 				fallingCharacter();
 				jp.removeAll();
-				new ResultShowFrame(jp,this);
+				new ShowResultFrame(jp, f2);
+//				f2.showResult(); //showResult
 				break;
 			}
+			
 		}
 	}
 

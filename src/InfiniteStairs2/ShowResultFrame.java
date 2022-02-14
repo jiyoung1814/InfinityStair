@@ -4,15 +4,18 @@ import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
 
-public class ResultShowFrame implements ActionListener{
+public class ShowResultFrame implements ActionListener{
 	JButton jb1,jb2,jb3;
 	JLabel gameover,jl_score, score, jl_best, best;
 	ImagePanel jp;
-	Character character;
-	public ResultShowFrame(ImagePanel jp, Character character){
+	Frame2 f2;
+	public ShowResultFrame(ImagePanel jp,Frame2 f2){
 		this.jp = jp;
-		this.character = character;
-		
+		this.f2 = f2;
+		result();
+	}
+	
+	public void result() {
 		ImageIcon ii = new ImageIcon("gameover.png");
 		Image img = ii.getImage().getScaledInstance(300, 50, Image.SCALE_SMOOTH);
 		ii.setImage(img);
@@ -96,7 +99,6 @@ public class ResultShowFrame implements ActionListener{
 		jp.add(jb3);
 		
 		jp.updateUI();
-		
 	}
 
 	@Override
@@ -112,26 +114,24 @@ public class ResultShowFrame implements ActionListener{
 			
 			jp.removeAll();
 			jp.repaint();
-			
 
-			character.setLocation(150, 350);
-			character.setVisible(true);
-			jp.add(character);
-			jp.updateUI();
+			Frame2.isRunning = true;
+			Frame2.isKeyBordPressed= false;
+			Frame2.direc = 1;
+			Frame2.TimerStart = true;
+			Frame2.score =0;
+			Frame2.number = 0;
+			Frame2.isEnd = false;
+			Character.isFalling = false;
 			
-//			
-//			Frame.isRunning = true;
-//			Frame2.isCreate = true;
-//			Frame2.isKeyBordPressed= false;
-//			Frame2.direc = 1;
-//			Frame2.TimerStart = true;
-//			MovingStair.score =0;
-//			CreateStairs.cnt = 0;
-//			MovingStair.isSuccess = true;
-//			ImagePanel.backY = -(2640-650);
-//			Timer.timeout = false;
-			
+			f2.sa.removeAll(f2.sa);
+			f2.initGame();
+
 		}
+	}
+	
+	public void restart() {
+		
 	}
 
 }
