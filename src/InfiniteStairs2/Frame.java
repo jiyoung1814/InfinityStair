@@ -1,36 +1,61 @@
 package InfiniteStairs2;
 
 import java.awt.event.*;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.Border;
 
 public class Frame extends JFrame implements ActionListener{
 	Container c;
 	ImagePanel jp;
 	JLabel character;
-	JLabel title,background;
+	JLabel title,background, nickname;
 	JButton jb1,jb2,jb3;
+	JTextField jt;
 	Frame2 f2;
+	RankingFrame rf;
+	int isRanking = -1; //-1: 안보임, 1: 보임
+	static String user;
+	static dbConnection db;
 
-	public Frame() {
+	public Frame() throws SQLException {
 		c = getContentPane();
 		c.setLayout(null);
 		
-		ImageIcon ii_jp = new ImageIcon("background.png");
-		Image img = ii_jp.getImage().getScaledInstance(450, 650, Image.SCALE_SMOOTH);
-		jp = new ImagePanel(new ImageIcon("background.png").getImage().getScaledInstance(400, 2640, Image.SCALE_SMOOTH));
+		db = new dbConnection();
+		
+		jp = new ImagePanel();
+		rf = new RankingFrame();
 			
 		ImageIcon ii_title = new ImageIcon("title.png");
 		title = new JLabel(ii_title);
 		title.setLocation(50, 50);
 		title.setSize(300, 150);
 		
+		
+		
+		nickname = new JLabel("NICNAME");
+		nickname.setSize(100, 50);
+		nickname.setLocation(50, 225);
+		nickname.setFont(new Font("pixopedia",Font.BOLD,15));
+		nickname.setHorizontalAlignment(JLabel.CENTER);
+		nickname.setOpaque(false);
+		
+		jt = new JTextField(15);
+		jt.setOpaque(false);
+		jt.setSize(200, 50);
+		jt.setLocation(150, 225);
+		jt.setFont(new Font("pixopedia",Font.BOLD,20));
+
+		
 		ImageIcon ii = new ImageIcon("boxer1.png");
-		img = ii.getImage().getScaledInstance(70, 150, Image.SCALE_SMOOTH);
+		Image img = ii.getImage().getScaledInstance(70, 150, Image.SCALE_SMOOTH);
 		ii.setImage(img);
 		character = new JLabel(ii);
 		character.setSize(70, 150);
-		character.setLocation(150, 300);
+		character.setLocation(150, 350);
 		
 		ImageIcon ii_bt = new ImageIcon("button1.png");
 		img = ii_bt.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
@@ -64,6 +89,8 @@ public class Frame extends JFrame implements ActionListener{
 		jb3.setSize(100,75);
 		jb3.addActionListener(this);
 		
+		jp.add(nickname);
+		jp.add(jt);
 		jp.add(character);
 		jp.add(title);
 		jp.add(character);
@@ -83,19 +110,50 @@ public class Frame extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource()==jb1) {
+			isRanking *= -1;
+			if(isRanking==1) {
+				jp.remove(jt);
+				jp.remove(nickname);
+				jp.remove(character);
+				jp.remove(title);
+				showRanking();
+			}
+			else {
+				jp.add(jt);
+				jp.add(nickname);
+				jp.add(character);
+				jp.add(title);
+				jp.remove(rf);
+			}
+			jp.updateUI();
 			
 		}
 		else if(e.getSource()==jb2) {
-			
+			jp.setBackgroundImage();
 		}
 		else if(e.getSource()==jb3) {
-
+			if(jt.getText().equals("")) user = "unknown";
+			else user = jt.getText();
 			jp.removeAll();
-			f2 = new Frame2(jp);
+			try {
+				f2 = new Frame2(jp);
+			} catch (SQLException e1) {e1.printStackTrace();}
 
 			
 		}
 		
+	}
+	
+	public void showRanking() {
+			String r= "";
+			jp.add(rf);
+			try {
+				rf.model.removeAllElements();
+				db.selectRanking();
+				for(int i=0;i<db.r.size();i++) {
+					rf.insertlist(String.format("%3d %s", (i+1),db.r.get(i)));
+				}
+			} catch (SQLException e1) {e1.printStackTrace();}
 	}
 	
 

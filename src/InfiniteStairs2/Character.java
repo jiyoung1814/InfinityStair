@@ -1,6 +1,7 @@
 package InfiniteStairs2;
 
 import java.awt.Image;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -160,8 +161,9 @@ public class Character extends JLabel implements Runnable{
 			if(isFalling){
 				fallingCharacter();
 				jp.removeAll();
-				new ShowResultFrame(jp, f2);
-//				f2.showResult(); //showResult
+				try {
+					new ShowResultFrame(jp, f2);
+				} catch (SQLException e) {e.printStackTrace();}
 				break;
 			}
 			

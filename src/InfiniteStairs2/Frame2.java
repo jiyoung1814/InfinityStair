@@ -1,6 +1,7 @@
 package InfiniteStairs2;
 
 import java.awt.event.*;
+import java.sql.SQLException;
 import java.awt.*;
 import javax.swing.*;
 
@@ -10,11 +11,10 @@ public class Frame2 implements KeyListener{
 	JButton up, change;
 	JLabel jl_score;
 	JProgressBar pgb;
-	static int round;
-	static int number;
-	static int score;
+	static int number; //계단 수
+	static int score; //점수
 	static int direc = 1; //-1:왼쪽 , 1: 오른쪽
-	static boolean TimerStart = true;
+	static boolean TimerStart = true; //타이머 초기화
 	static boolean isRunning = false; //게임 초기화 설정
 	static boolean isKeyBordPressed;
 	static boolean isStart; //버튼 눌렀을 때 시작
@@ -22,11 +22,11 @@ public class Frame2 implements KeyListener{
 	StairArray sa;
 	Character character;
 	Timer t;
-	Stair s;
 	
-	public Frame2(ImagePanel jp) {
+	public Frame2(ImagePanel jp) throws SQLException {
 		this.jp = jp;
 		sa = new StairArray();
+		
 		character = new Character("boxer1.png", jp,sa, this);
 		initGame();
 		
@@ -35,8 +35,7 @@ public class Frame2 implements KeyListener{
 	
 	public void initGame() {
 		
-		System.out.println(sa.size());
-		
+		sa.removeAll(sa);
 		character.changeImage("boxer1.png", 70, 150);
 		character.setX(150);
 		character.setY(350);
@@ -72,12 +71,13 @@ public class Frame2 implements KeyListener{
 		pgb.setForeground(new Color(200,71,32));
 		pgb.setBorderPainted(false);
 		
-		jl_score = new JLabel(Integer.toString(score));
+		jl_score = new JLabel();
 		jl_score.setHorizontalAlignment(JLabel.CENTER);
-		jl_score.setFont(new Font("야놀자 야체",Font.BOLD,50));
+		jl_score.setFont(new Font("pixopedia",Font.BOLD,50));
+		jl_score.setText(Integer.toString(score));
 //		jl_score.setForeground(new Color(200,71,32));
-		jl_score.setLocation(150, 570);
-		jl_score.setSize(100, 50);
+		jl_score.setLocation(100, 570);
+		jl_score.setSize(200, 50);
 		
 		jp.add(character);
 		jp.add(up);
@@ -109,6 +109,7 @@ public class Frame2 implements KeyListener{
 		}
 	}
 	
+
 	
 	@Override
 	public void keyReleased(KeyEvent e) {
